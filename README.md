@@ -31,3 +31,9 @@ Output:
 ```
 
 This output can be used to set Kiwi key animations. Please refer to the [Kiwi documentation](https://mrusme.github.io/kiwi) for more info.
+
+## Notice
+
+- image2kiwi converts GIFs into multiple frames, meaning that you'd end up with a constantly moving Kiwi animation!
+- image2kiwi converts RGBA into RGB - you can use transparent PNGs, but obviously the transparent parts won't make your keys transparent :-)
+- image2kiwi scales images down to a maximum of 3x4px while keeping their aspect ratio. This means: If you supply a 300x300px image, you will end up with a 3x3px animation. In that case the bottom keys row won't be triggered by the animation at all. You need to supply an image that's 3x4px or has an aspect ratio of 3:4.
