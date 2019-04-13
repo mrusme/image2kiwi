@@ -3,6 +3,15 @@ image2kiwi
 
 Converter from Images (JPEG, PNG, GIF, ...) into [Kiwi](https://mrusme.github.io/kiwi) `frames` JSON-arrays.
 
+## Installation
+
+```sh
+$ # Optional
+$ mkvirtualenv -p python3 image2kiwi
+$ # Install Pillow
+$ pip3 install pillow
+```
+
 ## Usage
 
 ```sh
