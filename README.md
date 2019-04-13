@@ -15,7 +15,7 @@ $ pip3 install pillow
 ## Usage
 
 ```sh
-$ python3 ./image2kiwi <imagefile>
+$ python3 ./image2kiwi <imagefile> ...
 ```
 
 E.g.
@@ -31,6 +31,22 @@ Output:
 ```
 
 This output can be used to set Kiwi key animations. Please refer to the [Kiwi documentation](https://mrusme.github.io/kiwi) for more info.
+
+### Multiple images
+
+If you don't have a GIF but still want an animation, you can simply select mulitple images and have image2kiwi generate you an animation from them:
+
+```sh
+$ python3 ./image2kiwi ~/Desktop/image1.jpg ~/Desktop/image2.jpg ~/Desktop/image3.jpg
+```
+
+### Customize animation speed
+
+You can use the parameter `--show-frame-for-ms <number>` to customize the animation playback speed. `--show-frame-for-ms` takes one argument which is the number of milliseconds each frame should be visible for. `--show-frame-for-ms 1000` would make each frame be visible for 1 full second for example. You can use the flag like this:
+
+```sh
+$ python3 ./image2kiwi --show-frame-for-ms 1000 ~/Desktop/image1.jpg ~/Desktop/image2.jpg ~/Desktop/image3.jpg
+```
 
 ## Notice
 

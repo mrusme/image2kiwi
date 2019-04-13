@@ -10,6 +10,7 @@ from PIL import GifImagePlugin
 class I2K:
     def __init__(self, argv):
         self._argv = argv
+        self._show_frame_for_ms = 250
 
     def get_key_name_from_xy(self, x, y):
         keys = [
@@ -21,7 +22,18 @@ class I2K:
         return keys[y][x]
 
     def convert(self):
-        return self.convert_image(self._argv[1])
+        frames = []
+
+        arg_idx = 1
+        while arg_idx < len(self._argv):
+            if self._argv[arg_idx] == "--show-frame-for-ms":
+                self._show_frame_for_ms = int(self._argv[(arg_idx+1)])
+                arg_idx = arg_idx + 2
+            print(arg_idx)
+            frames.extend(self.convert_image(self._argv[arg_idx]))
+            arg_idx = arg_idx + 1
+
+        return frames
 
     def convert_image(self, image_path):
         image_object = Image.open(image_path)
@@ -59,7 +71,7 @@ class I2K:
 
         return {
             "keys": keys,
-            "sleep": 250,
+            "sleep": self._show_frame_for_ms,
         }
 
     def build_frame_key_map(self, red, green, blue):
