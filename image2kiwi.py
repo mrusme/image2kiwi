@@ -4,6 +4,7 @@
 import os
 import sys
 import json
+import math
 from PIL import Image
 from PIL import GifImagePlugin
 
@@ -29,9 +30,49 @@ class I2K:
             if self._argv[arg_idx] == "--show-frame-for-ms":
                 self._show_frame_for_ms = int(self._argv[(arg_idx+1)])
                 arg_idx = arg_idx + 2
-            print(arg_idx)
-            frames.extend(self.convert_image(self._argv[arg_idx]))
-            arg_idx = arg_idx + 1
+            elif self._argv[arg_idx] == "--split-horizontally":
+                image_to_split = self._argv[(arg_idx+1)]
+                frames.extend(self.split_convert_image(image_to_split, direction="horizontal"))
+                arg_idx = arg_idx + 2
+            elif self._argv[arg_idx] == "--split-vertically":
+                image_to_split = self._argv[(arg_idx+1)]
+                frames.extend(self.split_convert_image(image_to_split, direction="vertical"))
+                arg_idx = arg_idx + 2
+            else:
+                frames.extend(self.convert_image(self._argv[arg_idx]))
+                arg_idx = arg_idx + 1
+        return frames
+
+    def split_convert_image(self, image_path, direction="horizontal"):
+        image_object = Image.open(image_path)
+        frames = []
+
+        image_width, image_height = image_object.size
+
+        crop_width = 3
+        crop_height = 4
+
+        if direction == "horizontal":
+            if image_height > 4:
+                image_object.thumbnail((9999, 4), Image.ANTIALIAS)
+        elif direction == "vertical":
+            if image_width > 3:
+                image_object.thumbnail((3, 9999), Image.ANTIALIAS)
+
+        image_width, image_height = image_object.size
+
+        for crop_location in range(0, (math.floor(image_width / 3) if direction == "horizontal" else math.floor(image_height / 4))):
+            x = ((crop_location * 3) if direction == "horizontal" else 0)
+            y = ((crop_location * 4) if direction == "vertical" else 0)
+            area = (
+                x,
+                y,
+                (x + 3),
+                (y + 4)
+            )
+            cropped_image_object = image_object.crop(area)
+            frame = self.convert_image_frame(cropped_image_object.convert('RGB'))
+            frames.append(frame)
 
         return frames
 
@@ -50,7 +91,6 @@ class I2K:
 
     def convert_image_frame(self, frame_object):
         frame = frame_object
-
         frame_width, frame_height = frame.size
         if frame_width > 3 or frame_height > 4:
             frame = frame_object.copy()
